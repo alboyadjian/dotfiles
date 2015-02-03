@@ -12,20 +12,29 @@ Plugin 'gmarik/Vundle.vim'
 " Bundle 'wincent/Command-T'
 Bundle 'altercation/vim-colors-solarized'
 Bundle 'tpope/vim-surround'
+" Commands for vim-surround
+" cs"' :: Replace double quotes with single
+" cs'" :: Replace single with double quotes
+" ds"  :: Strip leading and trailing double quotes
+Bundle 'tpope/vim-repeat' 
+" vim-repeat allows . to repeat changes to surrounding quotes
 Bundle 'tpope/vim-fugitive'
-"Bundle 'vim-ruby/vim-ruby'
 Bundle 'tpope/vim-rails'
 "Bundle 'tpope/vim-cucumber'
 "Bundle 'tpope/vim-git'
 "Bundle 'godlygeek/tabular'
-"Bundle 'matchit.zip'
-Bundle 'fholgado/minibufexpl.vim'
+Bundle 'matchit.zip'
+" Bundle 'fholgado/minibufexpl.vim'
+Bundle 'ecomba/vim-ruby-refactoring'
+" See https://github.com/ecomba/vim-ruby-refactoring for commands and keymaps
+" Main shortcut: :nnoremap <leader>rel  :RExtractLet<cr>
 Bundle 'tomtom/tcomment_vim'
 " Commands for tcomment_vim
 " gcc :: Toggle comment for the curent line
 " gc{motion} ::Toggle comments for motion
 Bundle 'kien/ctrlp.vim'
-
+Bundle 'bling/vim-bufferline'
+Bundle 'bling/vim-airline'
 call vundle#end()            " required
 
 filetype indent on    " Enable filetype-specific indenting
@@ -72,6 +81,16 @@ set statusline+=%<%P                         " file position
 "set statusline+=%{fugitive#statusline()}
 
 autocmd FileType ruby,eruby set omnifunc=rubycomplete#Complete
+"autocmd BufWritePre *.rb :%s/\s\+$//e
+
+function! <SID>StripTrailingWhitespaces()
+  let l = line(".")
+  let c = col(".")
+  %s/\s\+$//ge
+  call cursor(l, c)
+endfunction
+
+autocmd FileType ruby,eruby,cucumber autocmd BufWritePre <buffer> :call <SID>StripTrailingWhitespaces()
 
 runtime! macros/matchit.vim
 
@@ -141,6 +160,11 @@ nnoremap <silent><C-k> m`:silent -g/\m^\s*$/d<CR>``:noh<CR>
 nnoremap <silent><A-j> :set paste<CR>m`o<Esc>``:set nopaste<CR>
 nnoremap <silent><A-k> :set paste<CR>m`O<Esc>``:set nopaste<CR>
 
+" gr swaps word with next word
+" gl swaps word with previous word
+nnoremap <silent> gr "_yiw:s/\(\%#\w\+\)\(\_W\+\)\(\w\+\)/\3\2\1/<CR><c-o>/\w\+\_W\+<CR><c-l>:nohl<CR>
+nnoremap <silent> gl "_yiw?\w\+\_W\+\%#<CR>:s/\(\%#\w\+\)\(\_W\+\)\(\w\+\)/\3\2\1/<CR><c-o><c-l>:nohl<CR>
+
 " rails.vim stuff
 map <Leader>c :Rcontroller 
 map <Leader>d odebugger<cr>puts 'debugger'<esc>:w<cr>
@@ -166,11 +190,6 @@ nmap <silent> <leader>sv :so $MYVIMRC<CR>
 " set listchars=trail:.,tab:>-
 " set list
 
-" useful key bindings
-imap uu _
-imap hh =>
-imap aa @
-
 " better movement on wrapped lines
 nnoremap j gj
 nnoremap k gk
@@ -182,13 +201,40 @@ nnoremap ; :
 vnoremap < <gv
 vnoremap > >gv
 
+" filetype plugin ~/.vim/ftplugin/ruby_bashrockets.vim
+" works on a range if selected, otherwise current line
+" hn :: HashNew :: New style ruby hashes
+" ho :: HashOld :: Old style ruby hashes
+nnoremap hn :Bashrockets<CR>
+nnoremap ho :Hashrockets<CR>
+vnoremap hn :Bashrockets<CR>
+vnoremap ho :Hashrockets<CR>
 
-
+set t_Co=256
 " colors
 " colorscheme ir_black
 set background=dark
 colorscheme solarized
 " colorscheme vibrantink
+
+" let g:airline#extensions#bufferline#enabled = 1
+" let g:airline#extensions#tabline#buffer_nr_show = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#show_buffers = 1
+let g:bufferline_echo = 0
+let g:airline_theme = 'solarized'
+let g:airline_section_c = ''
+
+let g:airline#extensions#tabline#buffer_idx_mode = 1
+nmap <leader>1 <Plug>AirlineSelectTab1
+nmap <leader>2 <Plug>AirlineSelectTab2
+nmap <leader>3 <Plug>AirlineSelectTab3
+nmap <leader>4 <Plug>AirlineSelectTab4
+nmap <leader>5 <Plug>AirlineSelectTab5
+nmap <leader>6 <Plug>AirlineSelectTab6
+nmap <leader>7 <Plug>AirlineSelectTab7
+nmap <leader>8 <Plug>AirlineSelectTab8
+nmap <leader>9 <Plug>AirlineSelectTab9
 
 " NERDTree
 :noremap <leader>n :NERDTreeToggle<cr>
