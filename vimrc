@@ -16,6 +16,7 @@ Bundle 'tpope/vim-surround'
 " cs"' :: Replace double quotes with single
 " cs'" :: Replace single with double quotes
 " ds"  :: Strip leading and trailing double quotes
+" ysiw' :: Add single quotes to the current word
 Bundle 'tpope/vim-repeat' 
 " vim-repeat allows . to repeat changes to surrounding quotes
 Bundle 'tpope/vim-fugitive'
@@ -24,7 +25,6 @@ Bundle 'tpope/vim-rails'
 "Bundle 'tpope/vim-git'
 "Bundle 'godlygeek/tabular'
 Bundle 'matchit.zip'
-" Bundle 'fholgado/minibufexpl.vim'
 Bundle 'ecomba/vim-ruby-refactoring'
 " See https://github.com/ecomba/vim-ruby-refactoring for commands and keymaps
 " Main shortcut: :nnoremap <leader>rel  :RExtractLet<cr>
@@ -32,6 +32,12 @@ Bundle 'tomtom/tcomment_vim'
 " Commands for tcomment_vim
 " gcc :: Toggle comment for the curent line
 " gc{motion} ::Toggle comments for motion
+Bundle 'vhladama/vim-rubyhash'
+" Commands for vim-rubyhash
+" <leader>rt :: stringify keys with double quotes
+" <leader>rs :: symbolize keys
+" <leader>rq :: stringify keys with single quotes
+" <leader>rr :: turns hash into new-style ruby hash
 Bundle 'kien/ctrlp.vim'
 Bundle 'bling/vim-bufferline'
 Bundle 'bling/vim-airline'
@@ -78,7 +84,6 @@ set statusline+=\[%{strlen(&ft)?&ft:'none'}] " file type
 set statusline+=%=                           " right align remainder
 set statusline+=%-14(%l,%c%V%)               " line, character
 set statusline+=%<%P                         " file position
-"set statusline+=%{fugitive#statusline()}
 
 autocmd FileType ruby,eruby set omnifunc=rubycomplete#Complete
 "autocmd BufWritePre *.rb :%s/\s\+$//e
