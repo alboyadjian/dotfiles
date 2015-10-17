@@ -41,6 +41,10 @@ Bundle 'vhladama/vim-rubyhash'
 Bundle 'kien/ctrlp.vim'
 Bundle 'bling/vim-bufferline'
 Bundle 'bling/vim-airline'
+Bundle 'Yggdroot/indentLine'
+Bundle 'ngmy/vim-rubocop'
+Bundle 'scrooloose/syntastic'
+
 call vundle#end()            " required
 
 filetype indent on    " Enable filetype-specific indenting
@@ -80,10 +84,14 @@ set statusline=
 set statusline+=%-3.3n\                      " buffer number
 set statusline+=%f\                          " filename
 set statusline+=%h%m%r%w                     " status flags
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+" set statusline+=%*
 set statusline+=\[%{strlen(&ft)?&ft:'none'}] " file type
 set statusline+=%=                           " right align remainder
 set statusline+=%-14(%l,%c%V%)               " line, character
 set statusline+=%<%P                         " file position
+
 
 autocmd FileType ruby,eruby set omnifunc=rubycomplete#Complete
 "autocmd BufWritePre *.rb :%s/\s\+$//e
@@ -95,7 +103,7 @@ function! <SID>StripTrailingWhitespaces()
   call cursor(l, c)
 endfunction
 
-autocmd FileType ruby,eruby,cucumber autocmd BufWritePre <buffer> :call <SID>StripTrailingWhitespaces()
+autocmd FileType ruby,eruby,cucumber,javascript,html autocmd BufWritePre <buffer> :call <SID>StripTrailingWhitespaces()
 
 runtime! macros/matchit.vim
 
@@ -110,111 +118,9 @@ highlight StatusLine ctermfg=yellow
 
 let mapleader = ","
 
-" get me outta here
-" command Q q
-
-" clear highlighting
-map <C-h> :nohl<CR>
-
-" ctrl-s to save
-map <C-s> <esc>:w<CR>
-imap <C-s> <esc>:w<CR>
-
-" ctrl-n maps to :cn (next search result) 
-" ctrl-p maps to :cp (prev search result)
-map <C-n> :cn<CR>
-map <C-p> :cp<CR>
-
-"new tab
-map <C-t> <esc>:tabnew<CR>
-
-" run a single ruby test:
-" map <Leader>o ?def <CR>:nohl<CR>w"zy$:!ruby -I"test" <C-r>% -n <C-r>z<CR>
-map <Leader>o :.Rake<CR>
-
-" run a file of tests
-map <Leader>t :!ruby -I"test" -I"spec" %<CR>
-
-" run spec in documentation mode
-map <Leader>rd :!bundle exec rspec % --format documentation<CR>
-
-" run cucumber feature
-map <Leader>cc :!cucumber %<CR>
- 
-" split vertically with <leader> v
-" split horizontall with <leader> s
-" nmap <leader>v :vsplit<CR> <C-w><C-w>
-" nmap <leader>s :split<CR> <C-w><C-w>
-
-" switch windows with <leader> w
-nmap <leader>w <C-w><C-w>
-
-" Edit another file in the same directory as the current file " uses
-" expression to extract path from current file's path 
-map <Leader>e :e <C-R>=expand("%:p:h") . '/'<CR>
-map <Leader>s :split <C-R>=expand("%:p:h") .  '/'<CR>
-map <Leader>v :vnew <C-R>=expand("%:p:h") . '/'<CR>
-
-" Inserts the path of the currently edited file into a command
-" Command mode: Ctrl+P
-cmap <C-P> <C-R>=expand("%:p:h") . "/" <CR>
-
-" Ctrl-j/k deletes blank line below/above, and Alt-j/k inserts.
-nnoremap <silent><C-j> m`:silent +g/\m^\s*$/d<CR>``:noh<CR>
-nnoremap <silent><C-k> m`:silent -g/\m^\s*$/d<CR>``:noh<CR>
-nnoremap <silent><A-j> :set paste<CR>m`o<Esc>``:set nopaste<CR>
-nnoremap <silent><A-k> :set paste<CR>m`O<Esc>``:set nopaste<CR>
-
-" gr swaps word with next word
-" gl swaps word with previous word
-nnoremap <silent> gr "_yiw:s/\(\%#\w\+\)\(\_W\+\)\(\w\+\)/\3\2\1/<CR><c-o>/\w\+\_W\+<CR><c-l>:nohl<CR>
-nnoremap <silent> gl "_yiw?\w\+\_W\+\%#<CR>:s/\(\%#\w\+\)\(\_W\+\)\(\w\+\)/\3\2\1/<CR><c-o><c-l>:nohl<CR>
-
-" rails.vim stuff
-map <Leader>c :Rcontroller 
-map <Leader>d odebugger<cr>puts 'debugger'<esc>:w<cr>
-map <Leader>co :TComment<CR>
-map <Leader>vc :RVcontroller 
-map <Leader>sc :RScontroller 
-map <Leader>f :Rfunctional 
-map <Leader>vf :RVfunctional 
-map <Leader>m :Rmodel 
-map <Leader>vm :RVmodel 
-map <Leader>sm :RSmodel 
-map <Leader>u :Runittest 
-map <Leader>vu :RVunittest 
-map <Leader>su :RSunittest 
-map <Leader>vv :RVview 
-map <Leader>sv :RSview 
-
-" Quickly edit/reload the vimrc file
-nmap <silent> <leader>ev :e $MYVIMRC<CR>
-nmap <silent> <leader>sv :so $MYVIMRC<CR>
-
 " Display extra whitespace
 " set listchars=trail:.,tab:>-
 " set list
-
-" better movement on wrapped lines
-nnoremap j gj
-nnoremap k gk
-
-" allow semicolon to serve as colon
-nnoremap ; :
-
-" Reselect visual block after indent/outdent
-vnoremap < <gv
-vnoremap > >gv
-
-" filetype plugin ~/.vim/ftplugin/ruby_bashrockets.vim
-" works on a range if selected, otherwise current line
-" hn :: HashNew :: New style ruby hashes
-" ho :: HashOld :: Old style ruby hashes
-nnoremap hn :Bashrockets<CR>
-nnoremap ho :Hashrockets<CR>
-vnoremap hn :Bashrockets<CR>
-vnoremap ho :Hashrockets<CR>
-
 set t_Co=256
 " colors
 " colorscheme ir_black
@@ -241,11 +147,156 @@ nmap <leader>7 <Plug>AirlineSelectTab7
 nmap <leader>8 <Plug>AirlineSelectTab8
 nmap <leader>9 <Plug>AirlineSelectTab9
 
-" NERDTree
-:noremap <leader>n :NERDTreeToggle<cr>
-
-" fuzzyfinder textmate
-map <leader>h :FuzzyFinderTextMate<cr>
-let g:fuzzy_ignore = "*.png;*.PNG;*.JPG;*.jpg;*.GIF;*.gif;vendor/**;coverage/**;tmp/**;rdoc/**"
+" go to next lint error
+nmap <leader>n :lnext<cr>
 
 set tags=./tags
+
+let g:vimrubocop_config = '~/.rubocop.yml'
+
+let g:vim_json_syntax_conceal = 0
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+" let g:syntastic_auto_jump = 3
+let g:syntastic_loc_list_height = 5
+let g:syntastic_javascript_checkers = ['eslint']
+let g:syntastic_ruby_checkers = ['rubocop']
+
+" clear highlighting
+map <C-h> :nohl<CR>
+
+" ctrl-s to save
+map <C-s> <esc>:w<CR>
+
+" in insert mode, ctrl-s to save and return to insert
+imap <C-s> <esc>:w<CR>i
+
+" faster ways to get out of insert mode
+imap ;; <esc>
+imap ii <esc>
+
+" also works in visual mode
+vmap ;; <esc>
+
+" ctrl-n maps to :cn (next search result) 
+" ctrl-p maps to :cp (prev search result)
+nmap <C-n> :cn<CR>
+nmap <C-p> :cp<CR>
+
+" page up and page down with leader j/k 
+nmap <Leader>j <PageDown>
+nmap <Leader>k <PageUp>
+
+" switch windows with <leader> w
+nmap <leader>w <C-w><C-w>
+
+nmap <leader>d :bdelete<CR>
+
+" split vertically with <leader> v
+" nmap <leader>v :vsplit<CR> <C-w><C-w>
+
+" change double to single quotes
+nmap <leader>' cs"'
+
+" change single to double quotes
+nmap <leader>" cs"'
+
+" Quickly edit/reload the vimrc file
+nmap <silent> <leader>ev :e $MYVIMRC<CR>
+nmap <silent> <leader>sv :so $MYVIMRC<CR>
+
+" Edit another file in the same directory as the current file " uses
+" expression to extract path from current file's path 
+map <Leader>e :e <C-R>=expand("%:p:h") . '/'<CR>
+map <Leader>v :vnew <C-R>=expand("%:p:h") . '/'<CR>
+
+" Inserts the path of the currently edited file into a command
+" Command mode: Ctrl+P
+cmap <C-P> <C-R>=expand("%:p:h") . "/" <CR>
+
+vnoremap <silent> <Leader>rs :call ToSymbolKeysLinewise()<CR>
+vnoremap <silent> <Leader>rt :call ToStringKeysLinewise()<CR>
+vnoremap <silent> <Leader>rr :call To19KeysLinewise()<CR>
+vnoremap <silent> <Leader>rq :call ToSingleQuotedStringKeysLinewise()<CR>
+
+" Ctrl-j/k deletes blank line below/above, and Alt-j/k inserts.
+nnoremap <silent><C-j> m`:silent +g/\m^\s*$/d<CR>``:noh<CR>
+nnoremap <silent><C-k> m`:silent -g/\m^\s*$/d<CR>``:noh<CR>
+nnoremap <silent><A-j> :set paste<CR>m`o<Esc>``:set nopaste<CR>
+nnoremap <silent><A-k> :set paste<CR>m`O<Esc>``:set nopaste<CR>
+
+" leader o inserts blank line above without entering edit mode.
+" leader O does the same below and moves cursor position to that line
+nmap <silent><leader>o :set paste<CR>m`O<Esc>``:set nopaste<CR>
+nmap <silent><leader>O o<Esc>
+
+" useful for closing syntastic location list
+map <leader>l :lclose<CR>
+
+" I accidentally type q: instead of :q all the time.  It's a pain
+" in the ass.  This mapping does what I intented, rather than
+" what I typed. If I want to do what q: normall does, I can go to
+" command mode and use Ctrl-F.
+nmap q: :q
+ 
+" gr swaps word with next word
+" gl swaps word with previous word
+nnoremap <silent> gr "_yiw:s/\(\%#\w\+\)\(\_W\+\)\(\w\+\)/\3\2\1/<CR><c-o>/\w\+\_W\+<CR><c-l>:nohl<CR>
+nnoremap <silent> gl "_yiw?\w\+\_W\+\%#<CR>:s/\(\%#\w\+\)\(\_W\+\)\(\w\+\)/\3\2\1/<CR><c-o><c-l>:nohl<CR>
+
+" better movement on wrapped lines
+nnoremap j gj
+nnoremap k gk
+
+" allow semicolon to serve as colon
+nnoremap ; :
+
+" Reselect visual block after indent/outdent
+vnoremap < <gv
+vnoremap > >gv
+
+"new tab
+"map <C-t> <esc>:tabnew<CR>
+
+" run a single ruby test:
+" map <Leader>o ?def <CR>:nohl<CR>w"zy$:!ruby -I"test" <C-r>% -n <C-r>z<CR>
+" map <Leader>o :.Rake<CR>
+
+" run a file of tests
+" map <Leader>t :!ruby -I"test" -I"spec" %<CR>
+
+" run spec in documentation mode
+" map <Leader>rd :!bundle exec rspec % --format documentation<CR>
+
+" run cucumber feature
+" map <Leader>cc :!cucumber %<CR>
+ 
+" split horizontall with <leader> s
+" nmap <leader>v :vsplit<CR> <C-w><C-w>
+" nmap <leader>s :split<CR> <C-w><C-w>
+
+"map <Leader>s :split <C-R>=expand("%:p:h") .  '/'<CR>
+
+" rails.vim stuff
+" map <Leader>c :Rcontroller 
+" map <Leader>d odebugger<cr>puts 'debugger'<esc>:w<cr>
+" map <Leader>co :TComment<CR>
+" map <Leader>vc :RVcontroller 
+" map <Leader>sc :RScontroller 
+" map <Leader>f :Rfunctional 
+" map <Leader>vf :RVfunctional 
+" map <Leader>m :Rmodel 
+" map <Leader>vm :RVmodel 
+" map <Leader>sm :RSmodel 
+" map <Leader>u :Runittest 
+" map <Leader>vu :RVunittest 
+" map <Leader>su :RSunittest 
+" map <Leader>vv :RVview 
+" map <Leader>sv :RSview 
+if exists("&colorcolumn")
+  set colorcolumn=79
+endif
+let g:solarized_termtrans=1
