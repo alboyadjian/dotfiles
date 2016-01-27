@@ -14,7 +14,7 @@ if [ -z "$teamGroup" ]; then
   exit 1;
 else
   if [ -z $(grep $teamGroup /etc/group) ]; then
-    "creating group $teamGroup"
+    echo "creating group $teamGroup"
     groupadd $teamGroup
   fi
 fi
@@ -29,4 +29,5 @@ su - -c "mkdir -p .ssh" $userName
 su - -c "chmod 700 .ssh" $userName
 su - -c "echo $pubKey > .ssh/authorized_keys" $userName
 su - -c "chmod 600 .ssh/authorized_keys" $userName
-echo "$USERNAME ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/$userName
+echo "$userName ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/$userName
+ls -al /home | grep $userName
