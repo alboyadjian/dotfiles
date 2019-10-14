@@ -112,6 +112,19 @@ NERDTreeRender()	NERD_tree.txt	/*NERDTreeRender()*
 NERD_tree.txt	NERD_tree.txt	/*NERD_tree.txt*
 ReloadAllSnippets()	snipMate.txt	/*ReloadAllSnippets()*
 ReloadSnippets()	snipMate.txt	/*ReloadSnippets()*
+ReplaceWithRegister-configuration	ReplaceWithRegister.txt	/*ReplaceWithRegister-configuration*
+ReplaceWithRegister-dependencies	ReplaceWithRegister.txt	/*ReplaceWithRegister-dependencies*
+ReplaceWithRegister-description	ReplaceWithRegister.txt	/*ReplaceWithRegister-description*
+ReplaceWithRegister-history	ReplaceWithRegister.txt	/*ReplaceWithRegister-history*
+ReplaceWithRegister-ideas	ReplaceWithRegister.txt	/*ReplaceWithRegister-ideas*
+ReplaceWithRegister-installation	ReplaceWithRegister.txt	/*ReplaceWithRegister-installation*
+ReplaceWithRegister-known-problems	ReplaceWithRegister.txt	/*ReplaceWithRegister-known-problems*
+ReplaceWithRegister-limitations	ReplaceWithRegister.txt	/*ReplaceWithRegister-limitations*
+ReplaceWithRegister-remap	ReplaceWithRegister.txt	/*ReplaceWithRegister-remap*
+ReplaceWithRegister-todo	ReplaceWithRegister.txt	/*ReplaceWithRegister-todo*
+ReplaceWithRegister-usage	ReplaceWithRegister.txt	/*ReplaceWithRegister-usage*
+ReplaceWithRegister.txt	ReplaceWithRegister.txt	/*ReplaceWithRegister.txt*
+ReplaceWithRegister.vim	ReplaceWithRegister.txt	/*ReplaceWithRegister.vim*
 ResetAllSnippets()	snipMate.txt	/*ResetAllSnippets()*
 ResetSnippets()	snipMate.txt	/*ResetSnippets()*
 TCommentDefineType()	tComment.txt	/*TCommentDefineType()*
@@ -263,6 +276,8 @@ g:tcommentMapLeader2	tComment.txt	/*g:tcommentMapLeader2*
 g:tcommentMapLeaderOp1	tComment.txt	/*g:tcommentMapLeaderOp1*
 g:tcommentMapLeaderOp2	tComment.txt	/*g:tcommentMapLeaderOp2*
 g:tcommentOpModeExtra	tComment.txt	/*g:tcommentOpModeExtra*
+gr	ReplaceWithRegister.txt	/*gr*
+grr	ReplaceWithRegister.txt	/*grr*
 i_CTRL-G_S	surround.txt	/*i_CTRL-G_S*
 i_CTRL-G_s	surround.txt	/*i_CTRL-G_s*
 i_CTRL-R_<Tab>	snipMate.txt	/*i_CTRL-R_<Tab>*
@@ -446,6 +461,7 @@ tComment-Usage	tComment.txt	/*tComment-Usage*
 tComment-commands	tComment.txt	/*tComment-commands*
 tComment.txt	tComment.txt	/*tComment.txt*
 vS	surround.txt	/*vS*
+v_gr	ReplaceWithRegister.txt	/*v_gr*
 vgS	surround.txt	/*vgS*
 vs	surround.txt	/*vs*
 yS	surround.txt	/*yS*
